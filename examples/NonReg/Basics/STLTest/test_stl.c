@@ -18,6 +18,5 @@ int test_c(int a, int b, test t)
       return round(a/b);
     break;
   }
- 
 }
 
