@@ -122,7 +122,7 @@ boolean swipe_detected() {
   int gesture_code;
   int status;
   boolean ret = false;
-  
+
   sensor_vl53l0x->StartMeasurement();
 
   int top_done = 0;
@@ -339,7 +339,7 @@ void setup() {
 
   /* Configure the User Button in GPIO Mode */
   pinMode(USER_BTN, INPUT);
-  
+
   // Initialize I2C bus.
   dev_i2c = new TwoWire(I2C2_SDA, I2C2_SCL);
   dev_i2c->begin();
