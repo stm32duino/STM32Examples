@@ -30,7 +30,7 @@ To get temperature and humidity you will need the [X-NUCLEO-IKS01A1](http://www.
    * hum: Gauge block
 
  A screenshot of the dashboard:
- [[/img/dashboard_adafruit.png|alt="Dashboard Adafruit"]]
+ [Dashboard Adafruit](/img/dashboard_adafruit.png)
 
   It connects to the Adafruit IO's MQTT server (a.k.a broker) server then:
   * publishes announcement "_Hi, I'm STM32 user!_" to the topic `AIO_USERNAME"/feeds/hello"`
