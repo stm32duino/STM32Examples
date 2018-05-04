@@ -14,8 +14,8 @@
 
 #include <STM32RTC.h>
 
-/* Create a rtc object */
-STM32RTC rtc;
+/* Get the rtc object */
+STM32RTC& rtc = STM32RTC::getInstance();
 
 /* Change these values to set the current initial time
  *
