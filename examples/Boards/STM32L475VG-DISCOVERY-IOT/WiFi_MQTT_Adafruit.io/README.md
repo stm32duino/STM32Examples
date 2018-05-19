@@ -11,8 +11,8 @@ Install the following libraries using the Arduino IDE: **_Sketch -> Include Libr
 
   * [PubSubClient](https://github.com/knolleary/pubsubclient): Arduino Client for MQTT.
   * [STM32duino ISM43362-M3G-L44](https://github.com/stm32duino/WiFi-ISM43362-M3G-L44): WiFi library for the [B-L475E-IOT01A](http://www.st.com/en/evaluation-tools/b-l475e-iot01a.html) board.
-  * [STM32duino HTS221](https://github.com/stm32duino/HTS221): Ethernet library for STM32 based board with on-board Ethernet connector.
-
+  * [STM32duino HTS221](https://github.com/stm32duino/HTS221): to support the HTS221 capacitive digital sensor for relative humidity and temperature
+  
 # Adafruit IO Dashboard.
 
  You will need to create some feeds in your Adafruit IO Dashboard.
