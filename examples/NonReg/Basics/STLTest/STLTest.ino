@@ -13,6 +13,12 @@
 static uint32_t count_pressed = 0;
 static uint32_t random_val = 0;
 
+// Check if a default user button is defined
+// If not then define it to pin 2, user can set an other pin.
+// Button have to be wired on this pin
+#ifndef USER_BTN
+#define USER_BTN 2
+#endif
 int pushButton = USER_BTN;
 
 // the setup routine runs once when you press reset:
