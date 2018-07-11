@@ -12,12 +12,21 @@
 
 /*
  * 1 - Connect Rx/Tx of the desired Serial
- * 2 - Define SERIAL_PORT_TESTED by settinh Serial number to use 1,2,...
- *     ! Ensure this Serialx is enabled thanks 'Serial interface menu'!
+ * 2 - Define SERIAL_PORT_TESTED by setting Serial number to use 1,2,...
+ *     ! Ensure Serial feature is enabled thanks 'Serial interface menu'!
  * 3 - Optionnal: comment unwanted speed in serialSpeed array.
  */
+#if defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE == 2)
+#define SERIAL_PORT_TESTED Serial1
+HardwareSerial Serial1(USART1);
+#else
+#define SERIAL_PORT_TESTED Serial2
+HardwareSerial Serial2(USART2);
+#endif
+// or
+//HardwareSerial Serialx(rxpin, txpin)
+
 #define DECL_CONFIG(x)  {#x, x}
-#define SERIAL_PORT_TESTED Serial3
 
 typedef struct serialTest_s serialTest;
 struct serialTest_s {
