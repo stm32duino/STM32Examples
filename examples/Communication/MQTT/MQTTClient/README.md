@@ -9,7 +9,7 @@ Download the prebuilt Arduino port of MQTTClient and in the Arduino IDE use
 
 # Examples
 
-## Hello
+## Hello_stm32 (original _name Hello_)
 This is the basic example provided with the MQTTClient library.
 It has been modified to use the [STM32 Ethernet](https://github.com/stm32duino/STM32Ethernet) library.
 
