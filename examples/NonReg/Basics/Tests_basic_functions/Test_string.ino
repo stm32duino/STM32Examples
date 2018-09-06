@@ -32,12 +32,26 @@ void test_string(void)
   char sout[256]="";
   if(strcmp(dtostrf(1.23, 7, 2, sout), "   1.23") != 0) {validate = false;}
   if(strcmp(dtostrf(1.899, 2, 2, sout), "1.90") != 0) {validate = false;}
+
+  /*
+    On 8 bits architecture the floating precision is reduced.
+    So on the following tests the rounding error must be taken into account.
+  */
+#if defined(ARDUINO_ARCH_STM8)
+  if(strcmp(dtostrf(-123456.78910, 127, 6, sout),
+  "                                                                                                                 -123456.789062"
+           ) != 0) {validate = false;}
+  if(strcmp(dtostrf(-123456.78910, 128, 6, sout),
+  "-123456.789062                                                                                                                  "
+           ) != 0) {validate = false;}
+#else //ARDUINO_ARCH_STM32
   if(strcmp(dtostrf(-123456.78910, 127, 6, sout),
   "                                                                                                                 -123456.789100"
            ) != 0) {validate = false;}
   if(strcmp(dtostrf(-123456.78910, 128, 6, sout),
   "-123456.789100                                                                                                                  "
            ) != 0) {validate = false;}
+#endif
 
   printResult(validate);
 }
