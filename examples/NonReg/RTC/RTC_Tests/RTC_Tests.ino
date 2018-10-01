@@ -51,8 +51,8 @@ static byte day = 0;
 static byte month = 0;
 static byte year = 0;
 
-static STM32RTC::RTC_Hour_Format hourFormat = STM32RTC::HOUR_24;
-static STM32RTC::RTC_AM_PM period = STM32RTC::AM;
+static STM32RTC::Hour_Format hourFormat = STM32RTC::HOUR_24;
+static STM32RTC::AM_PM period = STM32RTC::AM;
 
 #ifndef STM32F1xx
 static STM32RTC::Alarm_Match SS_MATCH = STM32RTC::MATCH_SS;
@@ -70,7 +70,7 @@ void setup()
 void loop()
 {
   int c;  // Serial input
-  STM32RTC::RTC_Source_Clock clkSource = rtc.LSI_CLOCK;
+  STM32RTC::Source_Clock clkSource = rtc.LSI_CLOCK;
 
   // Select RTC clock source: LSI_CLOCK, LSE_CLOCK or HSE_CLOCK.
   Serial.println("Select clock Source:");
