@@ -1,5 +1,5 @@
 
-void rtc_config(STM32RTC::RTC_Source_Clock source, STM32RTC::RTC_Hour_Format format, const char* date, const char* time) {
+void rtc_config(STM32RTC::Source_Clock source, STM32RTC::Hour_Format format, const char* date, const char* time) {
   if (!IS_CLOCK_SOURCE(source)) {
     Serial.println("Wrong clock source");
     return;

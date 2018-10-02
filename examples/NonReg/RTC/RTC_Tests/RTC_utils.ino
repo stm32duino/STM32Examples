@@ -29,8 +29,8 @@ void initDateTime (const char* date, const char* time) {
   }
   day = conv2d(date + 4);
   hours = conv2d(time);
-  if (hourFormat == rtc.RTC_HOUR_12) {
-    period = hours >= 12 ? rtc.RTC_PM : rtc.RTC_AM;
+  if (hourFormat == rtc.HOUR_12) {
+    period = hours >= 12 ? rtc.PM : rtc.AM;
     hours = hours >= 13 ? hours - 12 : (hours < 1 ? hours + 12 : hours);
   }
   minutes = conv2d(time + 3);
@@ -56,8 +56,8 @@ void printDateTime(uint32_t t, uint32_t d, bool a) {
     print2digits(rtc.getMinutes());
     Serial.print(":");
     print2digits(rtc.getSeconds());
-    if (hourFormat == rtc.RTC_HOUR_12) {
-      Serial.print(period == rtc.RTC_AM ? " AM":" PM");
+    if (hourFormat == rtc.HOUR_12) {
+      Serial.print(period == rtc.AM ? " AM":" PM");
     }
     if(a) {
       // Print day...
@@ -71,8 +71,8 @@ void printDateTime(uint32_t t, uint32_t d, bool a) {
       print2digits(rtc.getAlarmMinutes());
       Serial.print(":");
       print2digits(rtc.getAlarmSeconds());
-      if (hourFormat == rtc.RTC_HOUR_12) {
-        Serial.print(period == rtc.RTC_AM ? " AM":" PM");
+      if (hourFormat == rtc.HOUR_12) {
+        Serial.print(period == rtc.AM ? " AM":" PM");
       }
     }
     Serial.println();
