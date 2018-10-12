@@ -14,22 +14,24 @@
 #include <malloc.h>
 
 extern "C" char *sbrk(int i);
-extern char _end; /* Defined by the linker */
+/* Use linker definition */
+extern char _end;
+extern char _sdata;
+extern char _estack;
+extern char _Min_Stack_Size;
 
-// Get from memory area defined in linker script
-// Example for STM32F103C8
-// RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 20K
-char *ramstart=(char *)0x20000000;
-char *ramend=(char *)0x20005000;
+static char *ramstart = &_sdata;
+static char *ramend = &_estack;
+static char *minSP = (char*)(ramend - &_Min_Stack_Size);
 
 #define NUM_BLOCKS 100
 #define BLOCK_SIZE 4
 
 void display_mallinfo(void)
 {
-  char *heapend=(char*)sbrk(0);
-  register char * stack_ptr asm("sp");
-  struct mallinfo mi=mallinfo();
+  char *heapend = (char*)sbrk(0);
+  char * stack_ptr = (char*)__get_MSP();
+  struct mallinfo mi = mallinfo();
 
   Serial.print("Total non-mmapped bytes (arena):       ");
   Serial.println(mi.arena);
@@ -52,26 +54,25 @@ void display_mallinfo(void)
   Serial.print("Topmost releasable block (keepcost):   ");
   Serial.println(mi.keepcost);
 
-  Serial.print("RAM Start 0x");
+  Serial.print("RAM Start at:       0x");
   Serial.println((unsigned long)ramstart, HEX);
-  Serial.print("Data/Bss end  0x");
+  Serial.print("Data/Bss end at:    0x");
   Serial.println((unsigned long)&_end, HEX);
-  Serial.print("Heap End  0x");
+  Serial.print("Heap end at:        0x");
   Serial.println((unsigned long)heapend, HEX);
-  Serial.print("Stack Ptr  0x");
+  Serial.print("Stack Ptr end at:   0x");
   Serial.println((unsigned long)stack_ptr, HEX);
-  Serial.print("RAM End  0x");
+  Serial.print("RAM End at:         0x");
   Serial.println((unsigned long)ramend, HEX);
 
-  Serial.print("Heap RAM Used: ");
+  Serial.print("Heap RAM Used:      ");
   Serial.println(mi.uordblks);
-  Serial.print("Program RAM Used ");
+  Serial.print("Program RAM Used:   ");
   Serial.println(&_end - ramstart);
-  Serial.print("Stack RAM Used ");
+  Serial.print("Stack RAM Used:     ");
   Serial.println(ramend - stack_ptr);
-
   Serial.print("Estimated Free RAM: ");
-  Serial.println(stack_ptr - heapend + mi.fordblks);
+  Serial.println(((stack_ptr < minSP) ? stack_ptr : minSP) - heapend + mi.fordblks);
 }
 
 void setup() {
@@ -81,7 +82,7 @@ void setup() {
 }
 
 void loop() {
-  unsigned int n=0;
+  unsigned int n = 0;
   char *alloc[NUM_BLOCKS];
 
   Serial.println("============== Before allocating blocks ==============");
@@ -92,7 +93,7 @@ void loop() {
     if (alloc[n] == NULL) {
       Serial.print("Failed to allocate blocks ");
       Serial.println(n);
-      while(1);
+      while (1);
     }
   }
 
@@ -104,7 +105,7 @@ void loop() {
 
   Serial.println("============== After freeing blocks ==============");
   display_mallinfo();
-  while(1);
+  while (1);
 }
 
 
