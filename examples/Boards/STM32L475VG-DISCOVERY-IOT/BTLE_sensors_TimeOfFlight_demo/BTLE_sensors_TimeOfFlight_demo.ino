@@ -118,10 +118,10 @@ void SetupSingleShot(void){
 }
 
 /* function to detect swipe on vl53l0x */
-boolean swipe_detected() {
+bool swipe_detected() {
   int gesture_code;
   int status;
-  boolean ret = false;
+  bool ret = false;
 
   sensor_vl53l0x->StartMeasurement();
 
@@ -182,10 +182,10 @@ boolean swipe_detected() {
 }
 
 /* function to detect tap on vl53l0x */
-boolean tap_detected() {
+bool tap_detected() {
   int gesture_code;
   int status;
-  boolean ret = false;
+  bool ret = false;
 
   sensor_vl53l0x->StartMeasurement();
 
