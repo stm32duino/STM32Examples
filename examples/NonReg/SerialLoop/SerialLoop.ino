@@ -10,6 +10,8 @@
   This example code is in the public domain.
 */
 
+#include "utils.h"
+
 /*
  * 1 - Connect Rx/Tx of the desired Serial
  * 2 - Define SERIAL_PORT_TESTED by setting Serial number to use 1,2,...
@@ -124,7 +126,7 @@ void setup() {
   SERIAL_PORT_MONITOR.begin(115200);
   while(!SERIAL_PORT_MONITOR);
   SERIAL_PORT_MONITOR.print("SerialLoop test on ");
-  SERIAL_PORT_MONITOR.println(xstr(SERIAL_PORT_TESTED));
+  SERIAL_PORT_MONITOR.println(XSTR(SERIAL_PORT_TESTED));
   SERIAL_PORT_MONITOR.print(configNb);
   SERIAL_PORT_MONITOR.println(" configs to test.");
   SERIAL_PORT_MONITOR.print(speedNb);
