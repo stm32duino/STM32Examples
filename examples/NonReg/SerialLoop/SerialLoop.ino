@@ -14,19 +14,21 @@
 
 /*
  * 1 - Connect Rx/Tx of the desired Serial
- * 2 - Define SERIAL_PORT_TESTED by setting Serial number to use 1,2,...
- *     ! Ensure Serial feature is enabled thanks 'Serial interface menu'!
+ * 2 - Define UART_TEST_INSTANCE
+ *     ! Ensure Serial feature is enabled thanks 'U(S)ART support menu'!
  * 3 - Optionnal: comment unwanted speed in serialSpeed array.
  */
-#if defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE == 2)
-#define SERIAL_PORT_TESTED Serial1
-HardwareSerial Serial1(USART1);
+#define SERIAL_PORT_TESTED SerialTest
+#if defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE != 1)
+#define UART_TEST_INSTANCE USART1
+#elif defined(USART2_BASE)
+#define UART_TEST_INSTANCE USART2
 #else
-#define SERIAL_PORT_TESTED Serial2
-HardwareSerial Serial2(USART2);
+#define UART_TEST_INSTANCE LPUART1
 #endif
 // or
 //HardwareSerial Serialx(rxpin, txpin)
+HardwareSerial SERIAL_PORT_TESTED(UART_TEST_INSTANCE);
 
 #define DECL_CONFIG(x)  {#x, x}
 
