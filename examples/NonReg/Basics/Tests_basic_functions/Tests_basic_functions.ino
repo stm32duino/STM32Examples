@@ -22,7 +22,9 @@ void list_test(void)
   Serial.println("1-String");
   Serial.println("2-Math");
   Serial.println("3-Bytes");
+#ifdef TIMER_TONE
   Serial.println("4-Advanced I/O");
+#endif
 }
 
 void loop() {
@@ -37,7 +39,9 @@ void loop() {
     case 1: test_string(); break;
     case 2: test_math(); break;
     case 3: test_bytes(); break;
+#ifdef TIMER_TONE
     case 4: test_IO(); break;
+#endif
     default: break;
     }
 

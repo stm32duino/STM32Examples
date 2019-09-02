@@ -1,7 +1,7 @@
 /*
  * Test some advanced I/O functions
  */
-
+#ifdef TIMER_TONE
 /*
  * Variable for advanced I/O test
  */
@@ -82,3 +82,4 @@ void test_IO_IT(void)
     clknb++;
   }
 }
+#endif
