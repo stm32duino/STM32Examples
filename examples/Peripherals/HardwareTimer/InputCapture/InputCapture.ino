@@ -27,6 +27,12 @@ void InputCapture_IT_callback(HardwareTimer*)
   LastCapture = CurrentCapture;
 }
 
+/* In case of timer rollover, frequency is to low to be measured set value to 0
+   To reduce minimum frequency, it is possible to increase prescaler. But this is at a cost of precision. */
+void Rollover_IT_callback(HardwareTimer*)
+{
+  FrequencyMeasured = 0;
+}
 
 void setup()
 {
@@ -53,6 +59,7 @@ void setup()
   MyTim->setPrescaleFactor(PrescalerFactor);
   MyTim->setOverflow(0x10000); // Max Period value to have the largest possible time to detect rising edge and avoid timer rollover
   MyTim->attachInterrupt(channel, InputCapture_IT_callback);
+  MyTim->attachInterrupt(Rollover_IT_callback);
   MyTim->resume();
 
   // Compute this scale factor only once
