@@ -38,6 +38,13 @@ void TIMINPUT_Capture_Rising_IT_callback(HardwareTimer*)
   LastPeriodCapture = CurrentCapture;
 }
 
+/* In case of timer rollover, frequency is to low to be measured set values to 0
+   To reduce minimum frequency, it is possible to increase prescaler. But this is at a cost of precision. */
+void Rollover_IT_callback(HardwareTimer*)
+{
+  FrequencyMeasured = 0;
+  DutycycleMeasured = 0;
+}
 
 /**
     @brief  Input capture interrupt callback : Compute frequency and dutycycle of input signal
@@ -103,6 +110,7 @@ void setup()
   MyTim->setOverflow(0x10000); // Max Period value to have the largest possible time to detect rising edge and avoid timer rollover
   MyTim->attachInterrupt(channelRising, TIMINPUT_Capture_Rising_IT_callback);
   MyTim->attachInterrupt(channelFalling, TIMINPUT_Capture_Falling_IT_callback);
+  MyTim->attachInterrupt(Rollover_IT_callback);
 
   MyTim->resume();
 
