@@ -52,7 +52,7 @@ void setup()
 
   MyTim->setMode(channel, TIMER_OUTPUT_COMPARE_PWM1, pin);
   // MyTim->setPrescaleFactor(8); // Due to setOverflow with MICROSEC_FORMAT, prescaler will be computed automatically based on timer input clock
-  MyTim->setOverflow(100000, MICROSEC_FORMAT); // 10000 microseconds = 10 milliseconds
+  MyTim->setOverflow(100000, MICROSEC_FORMAT); // 100000 microseconds = 100 milliseconds
   MyTim->setCaptureCompare(channel, 50, PERCENT_COMPARE_FORMAT); // 50%
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->attachInterrupt(channel, Compare_IT_callback);
