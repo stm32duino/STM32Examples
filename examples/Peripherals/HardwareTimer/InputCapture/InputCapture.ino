@@ -11,6 +11,7 @@
 uint32_t channel;
 volatile uint32_t FrequencyMeasured, LastCapture = 0, CurrentCapture;
 uint32_t input_freq = 0;
+volatile uint32_t rolloverCompareCount = 0;
 HardwareTimer *MyTim;
 
 void InputCapture_IT_callback(HardwareTimer*)
@@ -25,13 +26,20 @@ void InputCapture_IT_callback(HardwareTimer*)
     FrequencyMeasured = input_freq / (0x10000 + CurrentCapture - LastCapture);
   }
   LastCapture = CurrentCapture;
+  rolloverCompareCount = 0;
 }
 
 /* In case of timer rollover, frequency is to low to be measured set value to 0
    To reduce minimum frequency, it is possible to increase prescaler. But this is at a cost of precision. */
 void Rollover_IT_callback(HardwareTimer*)
 {
-  FrequencyMeasured = 0;
+  rolloverCompareCount++;
+
+  if (rolloverCompareCount > 1)
+  {
+    FrequencyMeasured = 0;
+  }
+
 }
 
 void setup()
