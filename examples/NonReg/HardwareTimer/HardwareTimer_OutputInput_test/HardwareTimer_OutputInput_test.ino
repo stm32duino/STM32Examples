@@ -375,6 +375,23 @@ void loop()
   /*********   Output test  ***/
   test_step++;
 
+  MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE, NC);
+  MyTim_output->setOverflow((1000000 / OUTPUT_FREQUENCY), MICROSEC_FORMAT);
+  MyTim_output->attachInterrupt(output_Update_IT_callback);
+  MyTim_output->resume();
+  reset_interrupt_count();
+  Verify_output(1, 0, 0);
+  Verify_output(2, 0, 0);
+  Verify_output_interrupts(EXPECTED_INTERRUPT_COUNT, 0, 0);
+  test_step++;
+
+  MyTim_output->detachInterrupt();
+  reset_interrupt_count();
+  Verify_output(1, 0, 0);
+  Verify_output(2, 0, 0);
+  Verify_output_interrupts(0, 0, 0);
+  test_step++;
+
   MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE_PWM1, TIM1_CH1N_PIN);
   MyTim_output->setOverflow((1000000 / OUTPUT_FREQUENCY), MICROSEC_FORMAT);
   MyTim_output->setCaptureCompare(Output1_channel, OUTPUT_DUTY1, PERCENT_COMPARE_FORMAT);
