@@ -375,7 +375,6 @@ void loop()
   /*********   Output test  ***/
   test_step++;
 
-  MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE, NC);
   MyTim_output->setOverflow((1000000 / OUTPUT_FREQUENCY), MICROSEC_FORMAT);
   MyTim_output->attachInterrupt(output_Update_IT_callback);
   MyTim_output->resume();
