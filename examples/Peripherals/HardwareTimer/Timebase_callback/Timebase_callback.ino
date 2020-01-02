@@ -31,7 +31,6 @@ void setup()
   // configure pin in output mode
   pinMode(pin, OUTPUT);
 
-  MyTim->setMode(2, TIMER_OUTPUT_COMPARE);  // In our case, channekFalling is configured but not really used. Nevertheless it would be possible to attach a callback to channel compare match.
   MyTim->setOverflow(10, HERTZ_FORMAT); // 10 Hz
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->resume();
