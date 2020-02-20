@@ -6,6 +6,11 @@
   Measured frequency is displayed on Serial Monitor.
 */
 
+/*
+  Note: Please verify that 'pin' used for PWM has HardwareTimer capability for your board
+  This is specially true for F1 serie (BluePill, ...)
+*/
+
 #define pin  D2
 
 uint32_t channel;
