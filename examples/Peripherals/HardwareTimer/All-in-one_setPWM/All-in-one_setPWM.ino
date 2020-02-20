@@ -6,6 +6,11 @@
   Once configured, there is no CPU load.
 */
 
+/*
+  Note: Please verify that 'pin' used for PWM has HardwareTimer capability for your board
+  This is specially true for F1 serie (BluePill, ...)
+*/
+
 #if defined(LED_BUILTIN)
 #define pin  LED_BUILTIN
 #else

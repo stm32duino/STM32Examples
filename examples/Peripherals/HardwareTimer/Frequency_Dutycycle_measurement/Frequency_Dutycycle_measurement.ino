@@ -8,6 +8,11 @@
 
 */
 
+/*
+  Note: Please verify that for your board,'pin' used for PWM has HardwareTimer capability
+  This is specially true for F1 serie (BluePill, ...)
+*/
+
 #define pin  D2
 
 uint32_t channelRising, channelFalling;
