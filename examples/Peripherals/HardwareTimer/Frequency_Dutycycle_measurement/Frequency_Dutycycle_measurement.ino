@@ -25,7 +25,7 @@ HardwareTimer *MyTim;
     @brief  Input capture interrupt callback : Compute frequency and dutycycle of input signal
 
 */
-void TIMINPUT_Capture_Rising_IT_callback(HardwareTimer*)
+void TIMINPUT_Capture_Rising_IT_callback(void)
 {
   CurrentCapture = MyTim->getCaptureCompare(channelRising);
   /* frequency computation */
@@ -47,7 +47,7 @@ void TIMINPUT_Capture_Rising_IT_callback(HardwareTimer*)
 
 /* In case of timer rollover, frequency is to low to be measured set values to 0
    To reduce minimum frequency, it is possible to increase prescaler. But this is at a cost of precision. */
-void Rollover_IT_callback(HardwareTimer*)
+void Rollover_IT_callback(void)
 {
   rolloverCompareCount++;
 
@@ -62,7 +62,7 @@ void Rollover_IT_callback(HardwareTimer*)
     @brief  Input capture interrupt callback : Compute frequency and dutycycle of input signal
 
 */
-void TIMINPUT_Capture_Falling_IT_callback(HardwareTimer*)
+void TIMINPUT_Capture_Falling_IT_callback(void)
 {
   /* prepare DutyCycle computation */
   CurrentCapture = MyTim->getCaptureCompare(channelFalling);

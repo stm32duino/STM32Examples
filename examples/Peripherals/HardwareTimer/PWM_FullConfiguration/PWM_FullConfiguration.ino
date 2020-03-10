@@ -28,12 +28,12 @@
 #define pin2  D3
 #endif
 
-void Update_IT_callback(HardwareTimer*)
+void Update_IT_callback(void)
 { // Update event correspond to Rising edge of PWM when configured in PWM1 mode
   digitalWrite(pin2, LOW); // pin2 will be complementary to pin
 }
 
-void Compare_IT_callback(HardwareTimer*)
+void Compare_IT_callback(void)
 { // Compare match event correspond to falling edge of PWM when configured in PWM1 mode
   digitalWrite(pin2, HIGH);
 }

@@ -1,6 +1,6 @@
 /*
   Timebase callback
-  This example shows how to configure HardwareTimer to execute a callback at regular interval.
+  This example shows how to configure HardwareTimer to execute a callback with some parameter at regular interval.
   Callback toggles pin.
   Once configured, there is only CPU load for callbacks executions.
 */
@@ -11,14 +11,19 @@
 #define pin  D2
 #endif
 
-void Update_IT_callback(void)
-{ // Toggle pin. 10hz toogle --> 5Hz PWM
-  digitalWrite(pin, !digitalRead(pin));
-}
 
+uint32_t MyData = 1; // Parameter used for callback is arbitrarily a pointer to uint32_t, it could be of other type.
+
+// Every second, print on serial MyData. And increment it.
+void Update_IT_callback(uint32_t* data)
+{
+  Serial.println(*data);
+  *data = *data + 1;
+}
 
 void setup()
 {
+  Serial.begin(9600); 
 #if defined(TIM1)
   TIM_TypeDef *Instance = TIM1;
 #else
@@ -31,8 +36,8 @@ void setup()
   // configure pin in output mode
   pinMode(pin, OUTPUT);
 
-  MyTim->setOverflow(10, HERTZ_FORMAT); // 10 Hz
-  MyTim->attachInterrupt(Update_IT_callback);
+  MyTim->setOverflow(1, HERTZ_FORMAT); // 1 Hz
+  MyTim->attachInterrupt(std::bind(Update_IT_callback, &MyData)); // bind argument to callback: When Update_IT_callback is called MyData will be given as argument
   MyTim->resume();
 }
 
