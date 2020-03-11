@@ -5,6 +5,10 @@
   Once configured, there is only CPU load for callbacks executions.
 */
 
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
 #if defined(LED_BUILTIN)
 #define pin  LED_BUILTIN
 #else

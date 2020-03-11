@@ -32,6 +32,11 @@
 /***************************************
 ** Defines
 ***************************************/
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
+
 #if !defined(ARDUINO_NUCLEO_L476RG)
 #error "Sketch is applicable to NUCLEO_L476RG"
 #endif

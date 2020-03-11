@@ -13,7 +13,11 @@
   This is specially true for F1 serie (BluePill, ...)
 */
 
-// 'pin' PWM will be mangaed automatically by hardware whereas 'pin2' PWM will be managed by software through interrupt callback
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
+// 'pin' PWM will be managed automatically by hardware whereas 'pin2' PWM will be managed by software through interrupt callback
 #if defined(LED_BUILTIN)
 #define pin  LED_BUILTIN
 

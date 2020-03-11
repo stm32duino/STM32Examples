@@ -13,6 +13,10 @@
   This is specially true for F1 serie (BluePill, ...)
 */
 
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
 #define pin  D2
 
 uint32_t channelRising, channelFalling;
