@@ -11,6 +11,10 @@
   This is specially true for F1 serie (BluePill, ...)
 */
 
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
 #define pin  D2
 
 uint32_t channel;
@@ -19,7 +23,7 @@ uint32_t input_freq = 0;
 volatile uint32_t rolloverCompareCount = 0;
 HardwareTimer *MyTim;
 
-void InputCapture_IT_callback(HardwareTimer*)
+void InputCapture_IT_callback(void)
 {
   CurrentCapture = MyTim->getCaptureCompare(channel);
   /* frequency computation */
@@ -36,7 +40,7 @@ void InputCapture_IT_callback(HardwareTimer*)
 
 /* In case of timer rollover, frequency is to low to be measured set value to 0
    To reduce minimum frequency, it is possible to increase prescaler. But this is at a cost of precision. */
-void Rollover_IT_callback(HardwareTimer*)
+void Rollover_IT_callback(void)
 {
   rolloverCompareCount++;
 

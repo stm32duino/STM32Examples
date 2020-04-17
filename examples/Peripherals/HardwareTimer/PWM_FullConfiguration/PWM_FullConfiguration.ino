@@ -13,7 +13,11 @@
   This is specially true for F1 serie (BluePill, ...)
 */
 
-// 'pin' PWM will be mangaed automatically by hardware whereas 'pin2' PWM will be managed by software through interrupt callback
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  < 0x01090000)
+#error "Due to API change, this sketch is compatible with STM32_CORE_VERSION  >= 0x01090000"
+#endif
+
+// 'pin' PWM will be managed automatically by hardware whereas 'pin2' PWM will be managed by software through interrupt callback
 #if defined(LED_BUILTIN)
 #define pin  LED_BUILTIN
 
@@ -28,12 +32,12 @@
 #define pin2  D3
 #endif
 
-void Update_IT_callback(HardwareTimer*)
+void Update_IT_callback(void)
 { // Update event correspond to Rising edge of PWM when configured in PWM1 mode
   digitalWrite(pin2, LOW); // pin2 will be complementary to pin
 }
 
-void Compare_IT_callback(HardwareTimer*)
+void Compare_IT_callback(void)
 { // Compare match event correspond to falling edge of PWM when configured in PWM1 mode
   digitalWrite(pin2, HIGH);
 }
