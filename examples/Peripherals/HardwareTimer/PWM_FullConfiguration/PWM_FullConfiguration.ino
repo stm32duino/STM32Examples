@@ -19,17 +19,17 @@
 
 // 'pin' PWM will be managed automatically by hardware whereas 'pin2' PWM will be managed by software through interrupt callback
 #if defined(LED_BUILTIN)
-#define pin  LED_BUILTIN
+  #define pin  LED_BUILTIN
 
-#if LED_BUILTIN == D3
-#error LED_BUILTIN == D3
-#else
-#define pin2  D3
-#endif
+  #if LED_BUILTIN == D3
+    #define pin2  D2
+  #else
+    #define pin2  D3
+  #endif
 
 #else
-#define pin  D2
-#define pin2  D3
+  #define pin   D2
+  #define pin2  D3
 #endif
 
 void Update_IT_callback(void)
