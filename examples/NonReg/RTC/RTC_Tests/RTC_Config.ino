@@ -34,4 +34,5 @@ void rtc_setTime(const char* date, const char* time) {
   // you can use also
   //rtc.setTime(hours, minutes, seconds);
   //rtc.setDate(weekDay, day, month, year);
+   delay(100);
 }

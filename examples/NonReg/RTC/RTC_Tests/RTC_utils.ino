@@ -6,13 +6,6 @@ static uint8_t conv2d(const char* p) {
   return 10 * v + *++p - '0';
 }
 
-void print2digits(int number) {
-  if (number < 10) {
-    Serial.print("0"); // print a 0 before if the number is < than 10
-  }
-  Serial.print(number);
-}
-
 // sample input: date = "Dec 26 2009", time = "12:34:56"
 void initDateTime (const char* date, const char* time) {
   year = conv2d(date + 9);
@@ -41,38 +34,28 @@ void initDateTime (const char* date, const char* time) {
 // d: delay between each print
 // a: display alarm
 void printDateTime(uint32_t t, uint32_t d, bool a) {
-  for (uint32_t i=0; i<t; i++) {
+  uint32_t subSeconds;
+
+  for (uint32_t i = 0; i < t; i++) {
+    rtc.getTime(&hours, &minutes, &seconds, &subSeconds, &period);
+
     // Print date...
-    print2digits(rtc.getMonth());
-    Serial.print("/");
-    print2digits(rtc.getDay());
-    Serial.print("/");
-    print2digits(rtc.getYear());
-    Serial.print("\t");
+    Serial.printf("%02d/%02d/%02d\t", rtc.getMonth(), rtc.getDay(), rtc.getYear());
 
     // ...and time
-    print2digits(rtc.getHours(&period));
-    Serial.print(":");
-    print2digits(rtc.getMinutes());
-    Serial.print(":");
-    print2digits(rtc.getSeconds());
-    if (hourFormat == rtc.HOUR_12) {
-      Serial.print(period == rtc.AM ? " AM":" PM");
-    }
-    if(a) {
-      // Print day...
-      Serial.print("\t");
-      print2digits(rtc.getAlarmDay());
-      Serial.print("\t");
+    Serial.printf("%02d:%02d:%02d.%03d", hours, minutes, seconds, subSeconds);
 
+    if (hourFormat == rtc.HOUR_12) {
+      Serial.print(period == rtc.AM ? " AM" : " PM");
+    }
+    if (a) {
+      // Print day...
+      Serial.printf("\t%02d\t", rtc.getAlarmDay());
       // ...and time
-      print2digits(rtc.getAlarmHours(&period));
-      Serial.print(":");
-      print2digits(rtc.getAlarmMinutes());
-      Serial.print(":");
-      print2digits(rtc.getAlarmSeconds());
+      Serial.printf("%02d:%02d:%02d.%03d", rtc.getAlarmHours(&period), rtc.getAlarmMinutes(),
+                    rtc.getAlarmSeconds(), rtc.getAlarmSubSeconds());
       if (hourFormat == rtc.HOUR_12) {
-        Serial.print(period == rtc.AM ? " AM":" PM");
+        Serial.print(period == rtc.AM ? " AM" : " PM");
       }
     }
     Serial.println();
