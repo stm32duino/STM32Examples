@@ -1,5 +1,4 @@
-#include "Arduino.h"
-#include <stdint.h>
+#include <EEPROM.h>
 
 /**
  * Most STM32 devices don't have an integrated EEPROM.
@@ -16,6 +15,10 @@
  * buffer even if you don't use the buffered API, so
  * it's strongly suggested to use the buffered API anyhow.
  */
+
+#if defined(DATA_EEPROM_BASE)
+#error "STM32 devices have an integrated EEPROM. No buffered API available."
+#endif
 
 #define DATA_LENGTH E2END
 
