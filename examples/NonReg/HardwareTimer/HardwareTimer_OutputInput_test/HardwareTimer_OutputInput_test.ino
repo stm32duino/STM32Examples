@@ -396,6 +396,7 @@ void loop()
   Verify_output_interrupts(0, 0, 0);
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE_PWM1, TIM1_CH1N_PIN);
   MyTim_output->setOverflow((1000000 / OUTPUT_FREQUENCY), MICROSEC_FORMAT);
   MyTim_output->setCaptureCompare(Output1_channel, OUTPUT_DUTY1, PERCENT_COMPARE_FORMAT);
@@ -404,24 +405,28 @@ void loop()
   Verify_output(2, 0, 0);
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE_TOGGLE, TIM1_CH1N_PIN);
   MyTim_output->resume();
   Verify_output(1, OUTPUT_FREQUENCY / 2, 50); // in PWM2, output is the complementary of PW1
   Verify_output(2, 0, 0);
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE_PWM2, TIM1_CH1N_PIN);
   MyTim_output->resume();
   Verify_output(1, OUTPUT_FREQUENCY, 100 - OUTPUT_DUTY1); // in PWM2, output is the complementary of PW1
   Verify_output(2, 0, 0);
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_COMPARE_PWM1, TIM1_CH1N_PIN);
   MyTim_output->resume();
   Verify_output(1, OUTPUT_FREQUENCY, OUTPUT_DUTY1);
   Verify_output(2, 0, 0);
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setMode(Output2_channel, TIMER_OUTPUT_COMPARE_PWM1, TIM1_CH2_PIN);
   MyTim_output->setCaptureCompare(Output2_channel, OUTPUT_DUTY2, PERCENT_COMPARE_FORMAT);
   MyTim_output->resumeChannel(Output2_channel);
@@ -571,6 +576,7 @@ void loop()
   }
   test_step++;
 
+  MyTim_output->pause();
   MyTim_output->setPWM(Output1_channel, TIM1_CH1N_PIN, OUTPUT_FREQUENCY, OUTPUT_DUTY1);
   Verify_output(1, OUTPUT_FREQUENCY, OUTPUT_DUTY1);
   test_step++;
