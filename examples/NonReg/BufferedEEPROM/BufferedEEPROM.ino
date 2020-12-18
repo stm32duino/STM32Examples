@@ -1,3 +1,5 @@
+#include <EEPROM.h>
+
 #if defined(DATA_EEPROM_BASE)
 #warning "STM32 devices have an integrated EEPROM. No buffered API available."
 
@@ -8,8 +10,6 @@ void loop() {
 }
 
 #else
-#include <EEPROM.h>
-
 /**
    Most STM32 devices don't have an integrated EEPROM.
    To emulate a EEPROM, the STM32 Arduino core emulated
