@@ -346,12 +346,15 @@ void setup() {
 
   // Initlialize components.
   HumTemp = new HTS221Sensor (dev_i2c);
+  HumTemp->begin();
   HumTemp->Enable();
 
   PressTemp = new LPS22HBSensor(dev_i2c);
+  PressTemp->begin();
   PressTemp->Enable();
 
-  sensor_vl53l0x = new VL53L0X(dev_i2c, PC6, PC7);
+  sensor_vl53l0x = new VL53L0X(dev_i2c, PC6);
+  sensor_vl53l0x->begin();
   sensor_vl53l0x->VL53L0X_Off();
   ret = sensor_vl53l0x->InitSensor(0x10);
   if(ret) {
