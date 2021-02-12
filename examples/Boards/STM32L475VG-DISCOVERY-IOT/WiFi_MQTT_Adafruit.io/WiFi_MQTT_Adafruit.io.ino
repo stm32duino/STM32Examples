@@ -80,6 +80,7 @@ void setup() {
 
   // Initlialize components.
   HumTemp = new HTS221Sensor (dev_i2c);
+  HumTemp->begin();
   HumTemp->Enable();
 }
 
