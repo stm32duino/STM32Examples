@@ -1,3 +1,7 @@
+/*
+   This sketch check, digital and analog pins defined in the variant
+ */
+
 #include "utils.h"
 
 #define PORTx(pn)   (char)('A' + STM_PORT(pn))
@@ -27,8 +31,6 @@ void printPinName(PinName pname, bool asPN, bool val, bool ln) {
 }
 
 void setup() {
-  //  Serial.setTx(PA9_R);
-  //  Serial.setRx(PA10_R);
   Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -37,16 +39,41 @@ void setup() {
 }
 
 void loop() {
+
+  bool testPassed = true;
+  String testStatus;
+  uint32_t blinkDelay;
+
+  Serial.println("#####");
   Serial.printf("NUM_DIGITAL_PINS = %i\n", NUM_DIGITAL_PINS);
   Serial.printf("NUM_ANALOG_INPUTS = %i\n", NUM_ANALOG_INPUTS);
 
-  checkDigitalPins();
-  checkAnalogPins();
+  /* Run the different tests */
+  if (!checkDigitalPins()) {
+    testPassed = false;
+  }
+  if (!checkAnalogPins()) {
+    testPassed = false;
+  }
 
+  /* Display test result */
+  if (testPassed) {
+    testStatus = "PASSED";
+    blinkDelay = 1000;
+  } else {
+    testStatus = "FAILED";
+    blinkDelay = 200;
+  }
+  Serial.println("");
+  Serial.println("########################################");
+  Serial.printf("#### Test %s\n", testStatus.c_str());
+  Serial.println("########################################");
+
+  /* Blink Led forever, slowly for test passed, and quickly for test failed */
   while (1) {
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-    delay(1000);                       // wait for a second
+    delay(blinkDelay);
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(1000);                       // wait for a second
+    delay(blinkDelay);
   }
 }

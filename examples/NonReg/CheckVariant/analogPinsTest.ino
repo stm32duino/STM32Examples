@@ -1,5 +1,12 @@
+/*
+   Check Analog pins
+   Return true in case of test passed
+   Return false in case of test failed
+*/
+bool checkAnalogPins(void) {
+  bool testPassed = true;
 
-void checkAnalogPins(void) {
+  Serial.println("#####");
   Serial.println("Checking analog pins definition...");
 
   for ( uint32_t i = 0; i < (NUM_ANALOG_INPUTS); i++) {
@@ -23,15 +30,10 @@ void checkAnalogPins(void) {
       res |= 4;
     }
     if (digitalPinToAnalogInput(pinnum_aTD_i) != i) {
-      
+
       res |= 8;
     }
-    /*
-       pname: Pin of type PinName (PY_n)
-       asPN: true display as a PinName, false as a pin number (PYn)
-       val: display value or not
-       ln: carriage return or not
-    */
+
     if (res) {
       Serial.printf("A%i defined as %i with pin name: ", i, A0 + i);
       printPinName(pn_aTpn_Ax, true, true, false);
@@ -39,22 +41,9 @@ void checkAnalogPins(void) {
       printPinName(pn_aTpn_Ax, false, true, false);
       Serial.printf(" --> %i\n", res);
       Serial.printf(" --> digitalPinToAnalogInput(%i) = %i\n", pinnum_aTD_i, digitalPinToAnalogInput(pinnum_aTD_i));
-      
-
-      //      Serial.print("\tPin name ");
-      //      printPinName(pn_Ax, true, true, false);
-      //      Serial.print(" have to be indexed higher than NUM_ANALOG_INPUTS (");
-      //      Serial.print(NUM_ANALOG_INPUTS);
-      //      Serial.println(") to be able to use:");
-      //      PinName pn_Ax_analog = analogInputToPinName(pinNametoDigitalPin(pn_Ax));
-      //      Serial.print("\tAnalogRead(");
-      //      printPinName(pn_Ax, false, false, false);
-      //      Serial.print(") -->  which currently use pin name: ");
-      //      printPinName(pn_Ax_analog, true, true, false);
-      //      Serial.print(" and pin number: ");
-      //      printPinName(pn_Ax_analog, false, true, true);
+      testPassed = false;
     }
   }
   Serial.println("End check analog pins");
-  Serial.println("#####");
+  return testPassed;
 }
