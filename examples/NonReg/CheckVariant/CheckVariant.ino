@@ -1,6 +1,8 @@
 /*
-   This sketch check, digital and analog pins defined in the variant
- */
+   This sketch check:
+    - digital and analog pins defined in the variant
+    - peripheral instances associated  to wire (I2C), serial (UART) and SPI
+*/
 
 #include "utils.h"
 
@@ -8,10 +10,36 @@
 #define PINx(pn)    STM_PIN(pn)
 
 /*
+   Initial check of Serial to be sure we can further print on serial
+   Returns true in case of test passed
+   Returns false in case of test failed
+*/
+bool checkSerial(void) {
+  bool testPassed = true;
+  USART_TypeDef *uart_rx = (USART_TypeDef *)pinmap_peripheral(digitalPinToPinName(PIN_SERIAL_RX), PinMap_UART_RX);
+  USART_TypeDef *uart_tx = (USART_TypeDef *)pinmap_peripheral(digitalPinToPinName(PIN_SERIAL_TX), PinMap_UART_TX);
+  if (uart_rx == NP) {
+    /* PIN_SERIAL_RX (%d) doesn't match a valid UART peripheral */
+    testPassed = false;
+  }
+  if (uart_tx == NP) {
+    /* PIN_SERIAL_TX doesn't match a valid UART peripheral */
+    testPassed = false;
+  }
+  if (uart_rx != uart_tx) {
+    /* PIN_SERIAL_RX (%d) doesn't match PIN_SERIAL_TX peripheral */
+    testPassed = false;
+  }
+
+  return testPassed;
+}
+
+/*
+   Prints Pin name
    pname: Pin of type PinName (PY_n)
    asPN: true display as a PinName, false as a pin number (PYn)
-   val: display value or not
-   ln: carriage return or not
+    val: display value or not
+    ln: carriage return or not
 */
 void printPinName(PinName pname, bool asPN, bool val, bool ln) {
   Serial.print("P");
@@ -31,6 +59,18 @@ void printPinName(PinName pname, bool asPN, bool val, bool ln) {
 }
 
 void setup() {
+  /* Check first whether Serial is valid and we can further print on Serial */
+  if (!checkSerial()) {
+    uint32_t blinkDelay = 200;
+    while (1) {
+      /* blink led quickly and forever in case of error */
+      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on
+      delay(blinkDelay);
+      digitalWrite(LED_BUILTIN, LOW);    // turn the LED off
+      delay(blinkDelay);
+    }
+  }
+
   Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -53,6 +93,9 @@ void loop() {
     testPassed = false;
   }
   if (!checkAnalogPins()) {
+    testPassed = false;
+  }
+  if (!checkIPInstance()) {
     testPassed = false;
   }
 
