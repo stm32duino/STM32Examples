@@ -39,19 +39,39 @@ USART_TypeDef* getSerialInstance(void) {
 #elif SERIAL_UART_INSTANCE == 3
   return USART3;
 #elif SERIAL_UART_INSTANCE == 4
+#if defined(UART4_BASE)
+  return UART4;
+#else
   return USART4;
+#endif
 #elif SERIAL_UART_INSTANCE == 5
+#if defined(UART5_BASE)
+  return UART5;
+#else
   return USART5;
+#endif
 #elif SERIAL_UART_INSTANCE == 6
   return USART6;
 #elif SERIAL_UART_INSTANCE == 7
+#if defined(UART7_BASE)
+  return UART7;
+#else
   return USART7;
+#endif
 #elif SERIAL_UART_INSTANCE == 8
+#if defined(UART8_BASE)
+  return UART8;
+#else
   return USART8;
+#endif
 #elif SERIAL_UART_INSTANCE == 9
   return USART9;
 #elif SERIAL_UART_INSTANCE == 10
+#if defined(UART10_BASE)
+  return UART10;
+#else
   return USART10;
+#endif
 #else
   return NULL;
 #endif
