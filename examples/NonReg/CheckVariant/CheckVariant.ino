@@ -7,7 +7,7 @@
 #include "utils.h"
 
 #if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  <= 0x01090000)
-  #error "This sketch is not compatible with core version prior to 2.0.0"
+#error "This sketch is not compatible with core version prior to 2.0.0"
 #endif
 
 #define PORTx(pn)   (char)('A' + STM_PORT(pn))
@@ -24,6 +24,7 @@
 */
 bool checkSerial(void) {
   bool testPassed = true;
+#if defined(PinMap_UART_RX) && defined(PinMap_UART_TX)
   USART_TypeDef *uart_rx = (USART_TypeDef *)pinmap_peripheral(digitalPinToPinName(PIN_SERIAL_RX), PinMap_UART_RX);
   USART_TypeDef *uart_tx = (USART_TypeDef *)pinmap_peripheral(digitalPinToPinName(PIN_SERIAL_TX), PinMap_UART_TX);
   if (uart_rx == NP) {
@@ -38,7 +39,7 @@ bool checkSerial(void) {
     /* PIN_SERIAL_RX (%d) doesn't match PIN_SERIAL_TX peripheral */
     testPassed = false;
   }
-
+#endif
   return testPassed;
 }
 
