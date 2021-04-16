@@ -6,8 +6,16 @@
 
 #include "utils.h"
 
+#if !defined(STM32_CORE_VERSION) || (STM32_CORE_VERSION  <= 0x01090000)
+  #error "This sketch is not compatible with core version prior to 2.0.0"
+#endif
+
 #define PORTx(pn)   (char)('A' + STM_PORT(pn))
 #define PINx(pn)    STM_PIN(pn)
+
+#ifndef LED_BUILTIN
+#define LED_BUILTIN PNUM_NOT_DEFINED
+#endif
 
 /*
    Initial check of Serial to be sure we can further print on serial
