@@ -6,10 +6,10 @@
   MISO pin must be externally connected to MOSI pin.
   To test the transfer on different SPI instance, just redefine SPI pins
   as follows:
-	#define MOSI_PIN  XXX
-	#define SCK_PIN   XXX
-	#define MISO_PIN  XXX
-        #define CS_PIN    XXX
+  #define MOSI_PIN  XXX
+  #define SCK_PIN     XXX
+  #define MISO_PIN  XXX
+   #define CS_PIN      XXX
 
   Test behavior:
   A test string is sent 9 times and compared to the Rx frame.
@@ -69,4 +69,3 @@ void setup() {
 void loop() {
   /* nothing to do */
 }
-
