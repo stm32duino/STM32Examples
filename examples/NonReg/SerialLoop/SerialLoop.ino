@@ -13,15 +13,15 @@
 #include "utils.h"
 
 /*
- * 1 - Connect Rx/Tx of the desired Serial
- * 2 - Define UART_TEST_INSTANCE
- *     ! Ensure Serial feature is enabled thanks 'U(S)ART support menu'!
- * 3 - Optionnal: comment unwanted speed in serialSpeed array.
- */
+   1 - Connect Rx/Tx of the desired Serial
+   2 - Define UART_TEST_INSTANCE
+       ! Ensure Serial feature is enabled thanks 'U(S)ART support menu'!
+   3 - Optionnal: comment unwanted speed in serialSpeed array.
+*/
 #define SERIAL_PORT_TESTED SerialTest
-#if defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE != 1)
+#if defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE != 1) && defined(USART1_BASE)
 #define UART_TEST_INSTANCE USART1
-#elif defined(USART2_BASE)
+#elif defined(SERIAL_UART_INSTANCE) && (SERIAL_UART_INSTANCE != 2) && defined(USART2_BASE)
 #define UART_TEST_INSTANCE USART2
 #else
 #define UART_TEST_INSTANCE LPUART1
@@ -40,23 +40,23 @@ struct serialTest_s {
 
 static serialTest serialConfig[] = {
 #ifdef UART_WORDLENGTH_7B
-DECL_CONFIG(SERIAL_7N1),
-DECL_CONFIG(SERIAL_7N2),
-DECL_CONFIG(SERIAL_6E1),
-DECL_CONFIG(SERIAL_6E2),
-DECL_CONFIG(SERIAL_6O1),
-DECL_CONFIG(SERIAL_6O2),
+  DECL_CONFIG(SERIAL_7N1),
+  DECL_CONFIG(SERIAL_7N2),
+  DECL_CONFIG(SERIAL_6E1),
+  DECL_CONFIG(SERIAL_6E2),
+  DECL_CONFIG(SERIAL_6O1),
+  DECL_CONFIG(SERIAL_6O2),
 #endif
-DECL_CONFIG(SERIAL_8N1),
-DECL_CONFIG(SERIAL_8N2),
-DECL_CONFIG(SERIAL_7E1),
-DECL_CONFIG(SERIAL_8E1),
-DECL_CONFIG(SERIAL_7E2),
-DECL_CONFIG(SERIAL_7O1),
-DECL_CONFIG(SERIAL_8O1),
-DECL_CONFIG(SERIAL_7O2),
-DECL_CONFIG(SERIAL_8O2),
-DECL_CONFIG(SERIAL_8E2)
+  DECL_CONFIG(SERIAL_8N1),
+  DECL_CONFIG(SERIAL_8N2),
+  DECL_CONFIG(SERIAL_7E1),
+  DECL_CONFIG(SERIAL_8E1),
+  DECL_CONFIG(SERIAL_7E2),
+  DECL_CONFIG(SERIAL_7O1),
+  DECL_CONFIG(SERIAL_8O1),
+  DECL_CONFIG(SERIAL_7O2),
+  DECL_CONFIG(SERIAL_8O2),
+  DECL_CONFIG(SERIAL_8E2)
 };
 
 static uint32_t serialSpeed[] = {
@@ -79,14 +79,14 @@ static uint32_t serialSpeed[] = {
 
 static uint32_t start_time = 0;
 static uint32_t configCur = 0;
-static uint32_t configNb = sizeof(serialConfig)/sizeof(serialTest);
-static uint32_t speedNb = sizeof(serialSpeed)/sizeof(uint32_t);
+static uint32_t configNb = sizeof(serialConfig) / sizeof(serialTest);
+static uint32_t speedNb = sizeof(serialSpeed) / sizeof(uint32_t);
 static uint32_t nbTestOK = 0;
 static uint32_t nbTestKO = 0;
 
 uint32_t dataMask(uint32_t config) {
   uint32_t databits = 0;
-  switch(config & 0x07) {
+  switch (config & 0x07) {
     case 0x02:
       databits = 6;
       break;
@@ -108,17 +108,17 @@ void test_uart(int val)
   int recval = 0;
   SERIAL_PORT_TESTED.write(val);
   delay(10);
-  while(SERIAL_PORT_TESTED.available()){
+  while (SERIAL_PORT_TESTED.available()) {
     recval = SERIAL_PORT_TESTED.read();
   }
-  if(val == recval) {
+  if (val == recval) {
     nbTestOK++;
   }
   else {
     SERIAL_PORT_MONITOR.print("Send: 0x");
-    SERIAL_PORT_MONITOR.print(val,HEX);
+    SERIAL_PORT_MONITOR.print(val, HEX);
     SERIAL_PORT_MONITOR.print("\tReceived: 0x");
-    SERIAL_PORT_MONITOR.print(recval,HEX);
+    SERIAL_PORT_MONITOR.print(recval, HEX);
     SERIAL_PORT_MONITOR.println(" --> KO <--");
     nbTestKO++;
   }
@@ -126,14 +126,14 @@ void test_uart(int val)
 
 void setup() {
   SERIAL_PORT_MONITOR.begin(115200);
-  while(!SERIAL_PORT_MONITOR);
+  while (!SERIAL_PORT_MONITOR);
   SERIAL_PORT_MONITOR.print("SerialLoop test on ");
   SERIAL_PORT_MONITOR.println(XSTR(SERIAL_PORT_TESTED));
   SERIAL_PORT_MONITOR.print(configNb);
   SERIAL_PORT_MONITOR.println(" configs to test.");
   SERIAL_PORT_MONITOR.print(speedNb);
   SERIAL_PORT_MONITOR.println(" speed to test.");
-  start_time=millis();
+  start_time = millis();
 }
 
 void loop() {
@@ -147,7 +147,7 @@ void loop() {
     SERIAL_PORT_MONITOR.print("Test duration (ms): ");
     SERIAL_PORT_MONITOR.print(millis() - start_time);
 
-    while(1); // End test
+    while (1); // End test
   }
 
   SERIAL_PORT_MONITOR.println("########################");
@@ -156,19 +156,18 @@ void loop() {
   SERIAL_PORT_MONITOR.print(" (0x");
   SERIAL_PORT_MONITOR.print(serialConfig[configCur].config, HEX);
   SERIAL_PORT_MONITOR.println(")");
-  for (uint32_t s=0; s<speedNb; s++) {
+  for (uint32_t s = 0; s < speedNb; s++) {
     SERIAL_PORT_MONITOR.print("Test at ");
     SERIAL_PORT_MONITOR.print(serialSpeed[s]);
     SERIAL_PORT_MONITOR.println(" baud");
-    SERIAL_PORT_TESTED.begin(serialSpeed[s],serialConfig[configCur].config);
+    SERIAL_PORT_TESTED.begin(serialSpeed[s], serialConfig[configCur].config);
     mask = dataMask(serialConfig[configCur].config);
-    for (uint32_t i=0; i<=(0xFF&mask); i++)
+    for (uint32_t i = 0; i <= (0xFF & mask); i++)
     {
-      test_uart(i&mask);
+      test_uart(i & mask);
     }
     SERIAL_PORT_TESTED.end();
   }
   SERIAL_PORT_MONITOR.println("End.");
   configCur++;
 }
-

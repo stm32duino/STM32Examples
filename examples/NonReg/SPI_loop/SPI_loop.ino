@@ -19,6 +19,11 @@
 */
 #include "SPI.h"
 
+#ifndef LED_BUILTIN
+#define LED_BUILTIN PNUM_NOT_DEFINED
+#warning "LED_BUILTIN is not defined."
+#endif
+
 #define MOSI_PIN  PIN_SPI_MOSI
 #define MISO_PIN  PIN_SPI_MISO
 #define SCK_PIN   PIN_SPI_SCK
