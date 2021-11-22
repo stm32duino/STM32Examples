@@ -38,7 +38,11 @@ static const char* mytime = __TIME__;
    clk = RTCCLK / ((predA +1) * (predS +1))
    clk = 1000000 / ((99 +1) * (9999+1)) = 1 Hz
 */
+#if defined(STM32F1xx)
+static uint32_t userPredA = 99;
+#else
 static int8_t userPredA = 99;
+#endif /* STM32F1xx */
 static int16_t userPredS = 9999;
 
 /* */
@@ -105,9 +109,15 @@ void loop()
     }
     break;
   }
+
+#if defined(STM32F1xx)
+  Serial.println("Testing only asynchronous prescaler setting");
+  uint32_t a;
+#else
   Serial.println("Testing asynchronous and synchronous prescaler setting");
   int8_t a;
-  int16_t s;
+#endif /* STM32F1xx */
+  int16_t s = 0;
   rtc.getPrediv(&a, &s);
   Serial.print("Async/Sync for default LSI clock: ");
   Serial.printf("%i/%i\n", a, s);
