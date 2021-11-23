@@ -38,7 +38,11 @@ static const char* mytime = __TIME__;
    clk = RTCCLK / ((predA +1) * (predS +1))
    clk = 1000000 / ((99 +1) * (9999+1)) = 1 Hz
 */
+#if defined(STM32F1xx)
+static uint32_t userPredA = 99;
+#else
 static int8_t userPredA = 99;
+#endif /* STM32F1xx */
 static int16_t userPredS = 9999;
 
 /* */
@@ -55,9 +59,9 @@ static STM32RTC::Hour_Format hourFormat = STM32RTC::HOUR_24;
 static STM32RTC::AM_PM period = STM32RTC::AM;
 
 #ifndef STM32F1xx
-  static STM32RTC::Alarm_Match SS_MATCH = STM32RTC::MATCH_SS;
-  static STM32RTC::Alarm_Match MMSS_MATCH = STM32RTC::MATCH_MMSS;
-  static STM32RTC::Alarm_Match HHMMSS_MATCH = STM32RTC::MATCH_HHMMSS;
+static STM32RTC::Alarm_Match SS_MATCH = STM32RTC::MATCH_SS;
+static STM32RTC::Alarm_Match MMSS_MATCH = STM32RTC::MATCH_MMSS;
+static STM32RTC::Alarm_Match HHMMSS_MATCH = STM32RTC::MATCH_HHMMSS;
 #endif
 static STM32RTC::Alarm_Match DHHMMSS_MATCH = STM32RTC::MATCH_DHHMMSS;
 
@@ -105,9 +109,15 @@ void loop()
     }
     break;
   }
+
+#if defined(STM32F1xx)
+  Serial.println("Testing only asynchronous prescaler setting");
+  uint32_t a;
+#else
   Serial.println("Testing asynchronous and synchronous prescaler setting");
   int8_t a;
-  int16_t s;
+#endif /* STM32F1xx */
+  int16_t s = 0;
   rtc.getPrediv(&a, &s);
   Serial.print("Async/Sync for default LSI clock: ");
   Serial.printf("%i/%i\n", a, s);
@@ -118,11 +128,7 @@ void loop()
   rtc.end();
 
   if (clkSource == rtc.HSE_CLOCK) {
-    Serial.print("User Async/Sync set to ");
-    Serial.print(userPredA);
-    Serial.print("/");
-    Serial.print(userPredS);
-    Serial.print(": ");
+    Serial.printf("User Async/Sync set to %i/%i:", userPredA, userPredS);
     rtc.setPrediv(userPredA, userPredS);
     rtc_config(clkSource, rtc.HOUR_24, mydate, mytime);
     rtc.getPrediv(&a, &s);
@@ -130,7 +136,7 @@ void loop()
     printDateTime(10, 1000, false);
   }
 
-  Serial.print("User Async/Sync reset use the computed one: ");
+  Serial.print("User Async/Sync reset to use the computed one: ");
   rtc.setPrediv(-1, -1);
   rtc_config(clkSource, rtc.HOUR_24, mydate, mytime);
   rtc.getPrediv(&a, &s);
