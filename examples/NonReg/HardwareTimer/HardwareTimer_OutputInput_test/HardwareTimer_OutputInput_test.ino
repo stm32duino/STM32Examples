@@ -49,11 +49,11 @@
 #define Output2_channel 2
 
 // TIM input
-#define TIM8_CH1_PIN PC6 // CN10 pin 4   Use also channel2 for freq/duty measurement
+#define TIM8_CH1_PIN PC_6_ALT1 // CN10 pin 4   Use also channel2 for freq/duty measurement
 #define Freq1_channelRising 1
 #define Freq1_channelFalling 2
 
-#define TIM8_CH3_PIN PC8 // CN10 pin 2   Use also channel4 for freq/duty measurement
+#define TIM8_CH3_PIN PC_8_ALT1 // CN10 pin 2   Use also channel4 for freq/duty measurement
 #define Freq2_channelRising 3
 #define Freq2_channelFalling 4
 
