@@ -8,9 +8,9 @@
   Designed to work on Nucleo_L476RG
   TIM1 ch1N and ch2 are used for output generation (TIM1_CH1N_PIN, and TIM1_CH2_PIN).
   It is important that both channel are on the same timer, in order to check influence on channel dependant API.
-  Management of interruption is done with variable incrementation.
-  TIM8 ch1/ch2 are used to measure frequence and duty cycle of TIM1_CH1N output generated signal
-  TIM8 ch3/ch4 are used to measure frequence and duty cycle of TIM1_CH2 output generated signal
+  Management of interruption is done with variable increment.
+  TIM8 ch1/ch2 are used to measure frequency and duty cycle of TIM1_CH1N output generated signal
+  TIM8 ch3/ch4 are used to measure frequency and duty cycle of TIM1_CH2 output generated signal
 
   Regular channel and complementary channel (TIM1_CH1N) are tested.
 
@@ -49,11 +49,11 @@
 #define Output2_channel 2
 
 // TIM input
-#define TIM8_CH1_PIN PC6 // CN10 pin 4   Use also channel2 for freq/duty measurement
+#define TIM8_CH1_PIN PC_6_ALT1 // CN10 pin 4   Use also channel2 for freq/duty measurement
 #define Freq1_channelRising 1
 #define Freq1_channelFalling 2
 
-#define TIM8_CH3_PIN PC8 // CN10 pin 2   Use also channel4 for freq/duty measurement
+#define TIM8_CH3_PIN PC_8_ALT1 // CN10 pin 2   Use also channel4 for freq/duty measurement
 #define Freq2_channelRising 3
 #define Freq2_channelFalling 4
 
@@ -61,7 +61,7 @@
 #define OUTPUT_DUTY1 20        // percentage
 #define OUTPUT_DUTY2 30        // percentage
 
-#define TEMPO_BEFORE_MEASUREMENT 500 // milisecondes
+#define TEMPO_BEFORE_MEASUREMENT 500 // millisecondes
 #define TOLERANCE 10                 // Percentage
 #define EXPECTED_INTERRUPT_COUNT ((TEMPO_BEFORE_MEASUREMENT * OUTPUT_FREQUENCY) / 1000)
 
