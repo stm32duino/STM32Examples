@@ -20,13 +20,22 @@
 #include "stm32yyxx_ll_adc.h"
 
 /* Values available in datasheet */
+#if defined(STM32C0xx)
+#define CALX_TEMP 30
+#else
 #define CALX_TEMP 25
-#if defined(STM32F1xx)
-#define V25       1430
+#endif
+
+#if defined(STM32C0xx)
+#define VTEMP      760
+#define AVG_SLOPE 2530
+#define VREFINT   1212
+#elif defined(STM32F1xx)
+#define VTEMP     1430
 #define AVG_SLOPE 4300
 #define VREFINT   1200
 #elif defined(STM32F2xx) || defined(STM32F4xx)
-#define V25       760
+#define VTEMP      760
 #define AVG_SLOPE 2500
 #define VREFINT   1210
 #endif
@@ -66,7 +75,7 @@ static int32_t readTempSensor(int32_t VRef)
   return (__LL_ADC_CALC_TEMPERATURE(VRef, analogRead(ATEMP), LL_ADC_RESOLUTION));
 #endif
 #elif defined(__LL_ADC_CALC_TEMPERATURE_TYP_PARAMS)
-  return (__LL_ADC_CALC_TEMPERATURE_TYP_PARAMS(AVG_SLOPE, V25, CALX_TEMP, VRef, analogRead(ATEMP), LL_ADC_RESOLUTION));
+  return (__LL_ADC_CALC_TEMPERATURE_TYP_PARAMS(AVG_SLOPE, VTEMP, CALX_TEMP, VRef, analogRead(ATEMP), LL_ADC_RESOLUTION));
 #else
   return 0;
 #endif
