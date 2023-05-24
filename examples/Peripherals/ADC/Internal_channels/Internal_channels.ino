@@ -93,6 +93,16 @@ static int32_t readVoltage(int32_t VRef, uint32_t pin)
 
 // The loop routine runs over and over again forever:
 void loop() {
+#if defined(ICACHE) && defined (HAL_ICACHE_MODULE_ENABLED) && !defined(HAL_ICACHE_MODULE_DISABLED)
+  bool icache_enabled = false;
+  if (HAL_ICACHE_IsEnabled() == 1) {
+    icache_enabled = true;
+    /* Disable instruction cache prior to internal cacheable memory update */
+    if (HAL_ICACHE_Disable() != HAL_OK) {
+      Error_Handler();
+    }
+  }
+#endif /* ICACHE && HAL_ICACHE_MODULE_ENABLED && !HAL_ICACHE_MODULE_DISABLED */
   // Print out the value read
   int32_t VRef = readVref();
   Serial.printf("VRef(mv)= %i", VRef);
@@ -104,4 +114,13 @@ void loop() {
 #endif
   Serial.printf("\tA0(mv)= %i\n", readVoltage(VRef, A0));
   delay(200);
+#if defined(ICACHE) && defined (HAL_ICACHE_MODULE_ENABLED) && !defined(HAL_ICACHE_MODULE_DISABLED)
+  if (icache_enabled)
+  {
+    /* Re-enable instruction cache */
+    if (HAL_ICACHE_Enable() != HAL_OK) {
+      Error_Handler();
+    }
+  }
+#endif /* ICACHE && HAL_ICACHE_MODULE_ENABLED && !HAL_ICACHE_MODULE_DISABLED */
 }
