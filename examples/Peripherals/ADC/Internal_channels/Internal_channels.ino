@@ -54,6 +54,13 @@ void setup() {
 
 static int32_t readVref()
 {
+#ifdef STM32U0xx
+  /* On some devices Internal voltage reference calibration value not programmed
+     during production and return 0xFFFF. See errata sheet. */
+  if ((uint32_t)(*VREFINT_CAL_ADDR) == 0xFFFF) {
+    return 3300U;
+  }
+#endif
 #ifdef __LL_ADC_CALC_VREFANALOG_VOLTAGE
 #ifdef STM32U5xx
   return (__LL_ADC_CALC_VREFANALOG_VOLTAGE(ADC1, analogRead(AVREF), LL_ADC_RESOLUTION));
