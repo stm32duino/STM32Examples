@@ -453,7 +453,7 @@ void loop()
   test_step++;
 
   MyTim_output->pauseChannel(Output1_channel);
-  MyTim_output->setMode(Output1_channel, TIMER_DISABLED);
+  MyTim_output->setMode(Output1_channel, TIMER_OUTPUT_DISABLED);
   MyTim_output->resumeChannel(Output1_channel);
   Verify_output(1, 0, 0); // in PWM2, output is the complementary of PW1
   Verify_output(2, OUTPUT_FREQUENCY, OUTPUT_DUTY2);
