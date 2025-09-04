@@ -44,8 +44,6 @@ void Reset_My_MCU() {
   IWatchdog.begin(1000);  //1ms tick then reset
   while (1)
     ;  // Wait for reset
-
-
 }
 
 void setup() {
