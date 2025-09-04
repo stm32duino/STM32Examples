@@ -1,6 +1,3 @@
-#include <STM32LowPower.h>
-#include <low_power.h>
-
 /* Last Reset Reason Sketch
 * This sketch will determine what caused the last reset on the STM32 MCU. Most microcontrollers
 * have a register dedicated to storing the last reason of the chip, weather being from a 
@@ -12,6 +9,7 @@
 
 #include "stm32yyxx_ll_rcc.h"
 #include "IWatchdog.h"
+// #include "STM32LowPower.h"
 
 #define USER_BTN_PIN USER_BTN  // Adjust this for your board
 
@@ -35,6 +33,9 @@ static int default_button_state = LOW;
 
 void Reset_My_MCU() {
   // There are a few reset conditions. Keep the one you wish to use and comment out the others.
+
+  // Below is the WakeUp reset condition (needs STM32LowPower.h library)
+  // LowPower.shutdown(1000);
 
   // Below is the Software reset condition
   // NVIC_SystemReset();
@@ -82,7 +83,7 @@ void setup() {
 #endif
 
 
-  // Clear reset flags
+  // Clear internal reset flags after they were captured
   LL_RCC_ClearResetFlags();
 #if defined(PWR_SCR_CSBF) || defined(PWR_CR1_CSBF) || defined(PWR_PMCR_CSSF) || defined(PWR_SR_CSSF)
 #if defined(STM32U0xx)
