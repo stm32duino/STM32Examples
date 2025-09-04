@@ -34,7 +34,7 @@ static int default_button_state = LOW;
 void Reset_My_MCU() {
   // There are a few reset conditions. Keep the one you wish to use and comment out the others.
 
-  //Bellow is the WakeUp reset condition (needs STM32LowPower.h library)
+  // Below is the WakeUp reset condition (needs STM32LowPower.h library)
   //LowPower.shutdown(1000);
 
   // Below is the Software reset condition
