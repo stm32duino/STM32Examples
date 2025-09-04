@@ -35,7 +35,7 @@ void Reset_My_MCU() {
   // There are a few reset conditions. Keep the one you wish to use and comment out the others.
 
   // Below is the WakeUp reset condition (needs STM32LowPower.h library)
-  //LowPower.shutdown(1000);
+  // LowPower.shutdown(1000);
 
   // Below is the Software reset condition
   //NVIC_SystemReset();
