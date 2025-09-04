@@ -51,8 +51,6 @@ void Reset_My_MCU() {
 void setup() {
   pinMode(USER_BTN_PIN, INPUT);
   default_button_state = digitalRead(USER_BTN_PIN);
-  //Serial.setRx(PA3);
-  //Serial.setTx(PA2);
   Serial.begin(115200);
   while (!Serial)
     ;  // Wait for Serial
