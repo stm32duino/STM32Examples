@@ -38,7 +38,7 @@ void Reset_My_MCU() {
   // LowPower.shutdown(1000);
 
   // Below is the Software reset condition
-  //NVIC_SystemReset();
+  // NVIC_SystemReset();
 
   // Below is the Watchdog Timer reset condition
   IWatchdog.begin(1000);  //1ms tick then reset
