@@ -89,7 +89,7 @@ static int32_t readTempSensor(int32_t VRef) {
 #ifdef __LL_ADC_CALC_TEMPERATURE
 #ifdef STM32U5xx
   temp = __LL_ADC_CALC_TEMPERATURE(ADC1, VRef, analogRead(ATEMP), LL_ADC_RESOLUTION);
-#elif defined(STM32WB0x)
+#elif defined(STM32WB0x) || defined(STM32WL3x)
   (void)VRef;
   temp = __LL_ADC_CALC_TEMPERATURE(analogRead(ATEMP), LL_ADC_DS_DATA_WIDTH_12_BIT);
 #else
