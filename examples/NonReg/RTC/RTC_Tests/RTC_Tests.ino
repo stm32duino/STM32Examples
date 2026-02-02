@@ -38,12 +38,8 @@ static const char* mytime = __TIME__;
    clk = RTCCLK / ((predA +1) * (predS +1))
    clk = 1000000 / ((99 +1) * (9999+1)) = 1 Hz
 */
-#if defined(STM32F1xx)
 static uint32_t userPredA = 99;
-#else
-static int8_t userPredA = 99;
-#endif /* STM32F1xx */
-static int16_t userPredS = 9999;
+static uint32_t userPredS = 9999;
 
 /* */
 static byte seconds = 0;
@@ -112,35 +108,35 @@ void loop()
 
 #if defined(STM32F1xx)
   Serial.println("Testing only asynchronous prescaler setting");
-  uint32_t a;
 #else
   Serial.println("Testing asynchronous and synchronous prescaler setting");
-  int8_t a;
 #endif /* STM32F1xx */
-  int16_t s = 0;
+  uint32_t a = 0;
+  uint32_t s = 0;
+
   rtc.getPrediv(&a, &s);
   Serial.print("Async/Sync for default LSI clock: ");
-  Serial.printf("%i/%i\n", a, s);
+  Serial.printf("%u/%u\n", a, s);
   rtc_config(clkSource, rtc.HOUR_24, mydate, mytime);
   Serial.print("Async/Sync for selected clock: ");
   rtc.getPrediv(&a, &s);
-  Serial.printf("%i/%i\n", a, s);
+  Serial.printf("%u/%u\n", a, s);
   rtc.end();
 
   if (clkSource == rtc.HSE_CLOCK) {
-    Serial.printf("User Async/Sync set to %i/%i:", userPredA, userPredS);
+    Serial.printf("User Async/Sync set to %u/%u:", userPredA, userPredS);
     rtc.setPrediv(userPredA, userPredS);
     rtc_config(clkSource, rtc.HOUR_24, mydate, mytime);
     rtc.getPrediv(&a, &s);
-    Serial.printf("%i/%i\n", a, s);
+    Serial.printf("%u/%u\n", a, s);
     printDateTime(10, 1000, false);
   }
 
   Serial.print("User Async/Sync reset to use the computed one: ");
-  rtc.setPrediv(-1, -1);
+  rtc.setPrediv(PREDIVA_MAX + 1, PREDIVS_MAX + 1);
   rtc_config(clkSource, rtc.HOUR_24, mydate, mytime);
   rtc.getPrediv(&a, &s);
-  Serial.printf("%i/%i\n", a, s);
+  Serial.printf("%u/%u\n", a, s);
 
   // Check date change
   Serial.println("Testing date and time");
