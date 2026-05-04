@@ -27,10 +27,14 @@
 #define UART_TEST_INSTANCE LPUART1
 #endif
 // or
-//HardwareSerial Serialx(rxpin, txpin)
+#if defined(STM32_CORE_VERSION) && (STM32_CORE_VERSION >= 0x020C0000)
+Uart SERIAL_PORT_TESTED(UART_TEST_INSTANCE);
+#else
 HardwareSerial SERIAL_PORT_TESTED(UART_TEST_INSTANCE);
+#endif
 
-#define DECL_CONFIG(x)  {#x, x}
+#define DECL_CONFIG(x) \
+  { #x, x }
 
 typedef struct serialTest_s serialTest;
 struct serialTest_s {
@@ -60,7 +64,6 @@ static serialTest serialConfig[] = {
 };
 
 static uint32_t serialSpeed[] = {
-  300,
   1200,
   2400,
   4800,
@@ -86,6 +89,22 @@ static uint32_t nbTestKO = 0;
 
 uint32_t dataMask(uint32_t config) {
   uint32_t databits = 0;
+#if defined(STM32_CORE_VERSION) && (STM32_CORE_VERSION >= 0x020C0000)
+  switch (config & SERIAL_DATA_MASK) {
+    case SERIAL_DATA_6:
+      databits = 6;
+      break;
+    case SERIAL_DATA_7:
+      databits = 7;
+      break;
+    case SERIAL_DATA_8:
+      databits = 8;
+      break;
+    default:
+      databits = 0;
+      break;
+  }
+#else
   switch (config & 0x07) {
     case 0x02:
       databits = 6;
@@ -100,11 +119,11 @@ uint32_t dataMask(uint32_t config) {
       databits = 0;
       break;
   }
+#endif
   return ((1 << databits) - 1);
 }
 
-void test_uart(int val)
-{
+void test_uart(int val) {
   int recval = 0;
   SERIAL_PORT_TESTED.write(val);
   delay(10);
@@ -113,8 +132,7 @@ void test_uart(int val)
   }
   if (val == recval) {
     nbTestOK++;
-  }
-  else {
+  } else {
     SERIAL_PORT_MONITOR.print("Send: 0x");
     SERIAL_PORT_MONITOR.print(val, HEX);
     SERIAL_PORT_MONITOR.print("\tReceived: 0x");
@@ -126,7 +144,8 @@ void test_uart(int val)
 
 void setup() {
   SERIAL_PORT_MONITOR.begin(115200);
-  while (!SERIAL_PORT_MONITOR);
+  while (!SERIAL_PORT_MONITOR)
+    ;
   SERIAL_PORT_MONITOR.print("SerialLoop test on ");
   SERIAL_PORT_MONITOR.println(XSTR(SERIAL_PORT_TESTED));
   SERIAL_PORT_MONITOR.print(configNb);
@@ -147,7 +166,8 @@ void loop() {
     SERIAL_PORT_MONITOR.print("Test duration (ms): ");
     SERIAL_PORT_MONITOR.print(millis() - start_time);
 
-    while (1); // End test
+    while (1)
+      ;  // End test
   }
 
   SERIAL_PORT_MONITOR.println("########################");
@@ -162,8 +182,7 @@ void loop() {
     SERIAL_PORT_MONITOR.println(" baud");
     SERIAL_PORT_TESTED.begin(serialSpeed[s], serialConfig[configCur].config);
     mask = dataMask(serialConfig[configCur].config);
-    for (uint32_t i = 0; i <= (0xFF & mask); i++)
-    {
+    for (uint32_t i = 0; i <= (0xFF & mask); i++) {
       test_uart(i & mask);
     }
     SERIAL_PORT_TESTED.end();
